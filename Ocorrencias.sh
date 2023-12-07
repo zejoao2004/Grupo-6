@@ -1,4 +1,4 @@
-# Desenhos de Bombeiros
+
 
 echo "                       
  / _(_)                               
@@ -9,16 +9,16 @@ echo "
 
 #!/bin/bash
 
-# Nome do arquivo CSV para ocorrências
+
 arquivo_ocorrencias="ocorrencias.csv"
-# Nome do arquivo CSV para formações
+
 arquivo_formacoes="formacoes.csv"
 
 # Função para registrar uma ocorrência
 function registar_ocorrencia() {
   echo "Registando ocorrência..."
   
-  # Solicita informações do usuário
+  #
   read -p "Veículo: " veiculo
   read -p "Condutor: " condutor
   read -p "Quilômetros iniciais: " km_iniciais
