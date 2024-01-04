@@ -47,6 +47,9 @@ ficheiro_formacoes="formacoes.csv"
 function registar_ocorrencia() {
   echo "Registando ocorrência..."
   
+  # Incrementa o número de ocorrências
+  num_ocorrencias=$(( $(wc -l < "$ficheiro_ocorrencias") + 1 ))
+
   # Solicita informações ao utilizador
   read -p "Veículo: " veiculo
   read -p "Condutor: " condutor
@@ -61,12 +64,12 @@ function registar_ocorrencia() {
 
   # Verifica se o ficheiro de ocorrências CSV já existe
   if [ ! -e "$ficheiro_ocorrencias" ]; then
-    # Campos  do ficheiro 
-    echo "Data,Veículo,Condutor,Quilômetros Iniciais,Quilômetros Finais,Guarnição,TO,Tipo de Ocorrência" > "$ficheiro_ocorrencias"
+    # Cria o cabeçalho do CSV
+    echo "ID,Data,Veículo,Condutor,Quilômetros Iniciais,Quilômetros Finais,Guarnição,TO,Tipo de Ocorrência" > "$ficheiro_ocorrencias"
   fi
 
   # Adiciona a ocorrência ao Ficheiro de ocorrências CSV
-  echo "$data,$veiculo,$condutor,$km_iniciais,$km_finais,$guarnicao,$to,$tipo_ocorrencia" >> "$ficheiro_ocorrencias"
+  echo "$num_ocorrencias,$data,$veiculo,$condutor,$km_iniciais,$km_finais,$guarnicao,$to,$tipo_ocorrencia" >> "$ficheiro_ocorrencias"
 
   echo "Ocorrência registrada com sucesso no ficheiro $ficheiro_ocorrencias."
 }
@@ -94,22 +97,24 @@ function eliminar_ocorrencia() {
     column -s, -t "$ficheiro_ocorrencias"
     
     # Solicita o número da linha a ser eliminada
-    read -p "Escreva o número da linha a ser eliminada: " linha
+    read -p "Escreva o número da linha a ser eliminada: " num_ocorrencia
     
     # Elimina a linha do ficheiro CSV de ocorrências
-    sed -i "${linha}d" "$ficheiro_ocorrencias"
+    sed -i "/^$num_ocorrencia,/d" "$ficheiro_ocorrencias"
     
-    echo "Ocorrência eliminada com sucesso."
+    echo "Ocorrência número $num_ocorrencia eliminada com sucesso."
   else
     echo "Nenhuma ocorrência encontrada."
   fi
 }
 
-
 # Função para registrar uma formação
 function registrar_formacao() {
   echo "Registar formação..."
   
+  # Incrementa o número de formações
+  num_formacoes=$(( $(wc -l < "$ficheiro_formacoes") + 1 ))
+
   # Solicita informações do Utilizador 
   read -p "Nome da Formação: " nome_formacao
   read -p "Instrutor: " instrutor
@@ -117,13 +122,13 @@ function registrar_formacao() {
   read -p "Data da Formação (DD-MM-yyyy): " data_formacao
 
   # Verifica se o ficheiro CSV de formações já existe
-  if [ ! -e "$ficheiro_formacoes" ]; then    #-e serve para verificar se o ficheio existe 
-    # Se não existir, cria o cabeçalho do CSV
-    echo "Nome da Formação,Instrutor,Local,Data da Formação" > "$ficheiro_formacoes"
+  if [ ! -e "$ficheiro_formacoes" ]; then
+    # Cria o cabeçalho do CSV
+    echo "ID,Nome da Formação,Instrutor,Local,Data da Formação" > "$ficheiro_formacoes"
   fi
 
   # Adiciona a formação ao ficheiro de formações CSV
-  echo "$nome_formacao,$instrutor,$local_formacao,$data_formacao" >> "$ficheiro_formacoes"
+  echo "$num_formacoes,$nome_formacao,$instrutor,$local_formacao,$data_formacao" >> "$ficheiro_formacoes"
 
   echo "Formação registrada com sucesso no ficheiro $ficheiro_formacoes."
 }
@@ -151,16 +156,17 @@ function eliminar_formacao() {
     column -s, -t "$ficheiro_formacoes"
     
     # Solicita o número da linha a ser eliminada
-    read -p "Insira o número da linha a ser eliminada: " linha
+    read -p "Insira o número da linha a ser eliminada: " num_formacao
     
     # Elimina a linha do ficheiro CSV de formações
-    sed -i "${linha}d" "$ficheiro_formacoes"
+    sed -i "/^$num_formacao,/d" "$ficheiro_formacoes"
     
-    echo "Formação eliminada com sucesso."
+    echo "Formação número $num_formacao eliminada com sucesso."
   else
     echo "Nenhuma formação encontrada."
   fi
 }
+
 
 # Loop principal do programa
 while true; do
