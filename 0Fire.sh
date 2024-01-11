@@ -42,13 +42,19 @@ echo "
 ficheiro_ocorrencias="ocorrencias.csv"
 # Nome do Ficheiro CSV para formações
 ficheiro_formacoes="formacoes.csv"
+# Contador de ocorrencias
+ficheiro_cocorrencias="contadorOcorrencias.txt"
+#Contador de formações
+ficheiro_cformacoes="contadorFormacoes.txt"
+
 
 # Função para registrar uma ocorrência
 function registar_ocorrencia() {
   echo "Registando ocorrência..."
   
-  # Incrementa o número de ocorrências
-  num_ocorrencias=$(( $(wc -l < "$ficheiro_ocorrencias") + 1 ))
+  # Vai buscar o numero de ocorrencias e incrementa
+  num_ocorrencias=$(( $(cat "$ficheiro_cocorrencias") + 1 ))
+  echo $num_ocorrencias > "$ficheiro_cocorrencias"
 
   # Solicita informações ao utilizador
   read -p "Veículo: " veiculo
@@ -114,6 +120,10 @@ function registrar_formacao() {
   
   # Incrementa o número de formações
   num_formacoes=$(( $(wc -l < "$ficheiro_formacoes") + 1 ))
+
+
+  num_formacoes=$(( $(cat "$ficheiro_cformacoes") + 1 ))
+  echo $num_formacoes > "$ficheiro_cformacoes"
 
   # Solicita informações do Utilizador 
   read -p "Nome da Formação: " nome_formacao
